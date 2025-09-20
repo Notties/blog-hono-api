@@ -1,34 +1,49 @@
 import { createMiddleware } from "hono/factory";
-import { jwt } from "hono/jwt";
+import { jwt, verify } from "hono/jwt";
 import { db } from "@/db";
 import { User, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { config } from "@/config";
 import { AppEnv } from "@/shared/types/hono";
+import { HTTPException } from "hono/http-exception";
+import { getCookie } from "hono/cookie";
 
 export const authMiddleware = createMiddleware<AppEnv>(async (c, next) => {
-  const jwtMiddleware = jwt({ secret: config.jwtSecret });
-  const response = await jwtMiddleware(c, async () => {});
-  if (response) return response; // Token is invalid or missing
+  const token = getCookie(c, "accessToken");
 
-  const payload = c.get("jwtPayload");
-  if (!payload?.sub) {
-    return c.json({ error: "Invalid token payload" }, 401);
+  if (!token) {
+    throw new HTTPException(401, {
+      message: "Unauthorized: No token provided",
+    });
   }
 
-  const userId = parseInt(payload.sub, 10);
-  const [userResult] = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, userId))
-    .limit(1);
+  try {
+    const payload = await verify(token, config.jwtSecret);
+    if (!payload?.sub) {
+      throw new HTTPException(401, {
+        message: "Unauthorized: Invalid token payload",
+      });
+    }
 
-  if (!userResult) {
-    return c.json({ error: "User not found" }, 401);
+    const userId = parseInt(payload.sub.toString(), 10);
+    const [userResult] = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, userId))
+      .limit(1);
+
+    if (!userResult) {
+      throw new HTTPException(401, { message: "Unauthorized: User not found" });
+    }
+
+    c.set("user", userResult);
+    await next();
+  } catch (error) {
+    throw new HTTPException(401, {
+      message: "Unauthorized: Invalid token",
+      cause: error,
+    });
   }
-
-  c.set("user", userResult);
-  await next();
 });
 
 export const roleGuard = (allowedRoles: Array<User["role"]>) => {

@@ -5,8 +5,7 @@
     "build": "bun build --compile --minify --sourcemap ./src/server.ts --outfile ./dist/server",
     "start": "bun run ./dist/server",
     "db:push": "drizzle-kit push",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "bun src/db/migrate.ts"
+    "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.3",

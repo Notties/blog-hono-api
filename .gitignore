@@ -1,0 +1,90 @@
+# =========================================
+# Dependencies & Lock Files
+# =========================================
+# Directory for project dependencies
+/node_modules
+
+# Bun lockfile
+bun.lockb
+
+# =========================================
+# Environment Variables
+# =========================================
+# Ignore all .env files to prevent secrets from being committed.
+# A .env.example should be in the repository instead.
+.env
+.env.*
+!.env.example
+
+# =========================================
+# Build Output & Caches
+# =========================================
+# Directory for compiled files or production builds
+/dist
+/build
+
+# Bun build cache
+/.bun
+
+# =========================================
+# Logs
+# =========================================
+# Log files
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# =========================================
+# Drizzle ORM
+# =========================================
+# Drizzle ORM generated files and session data.
+# The migration files in /drizzle should be committed, so we don't ignore the whole folder.
+drizzle/meta/
+drizzle/session.json
+
+# =========================================
+# Operating System Files
+# =========================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+Thumbs.db
+
+# Windows
+ehthumbs.db
+ehthumbs_vista.db
+
+# =========================================
+# Editor & IDE Directories
+# =========================================
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# JetBrains (WebStorm, etc.)
+.idea
+
+# =========================================
+# Testing
+# =========================================
+# Test coverage reports
+/coverage
+.nyc_output
+
+# =========================================
+# Other
+# =========================================
+# Temporary files
+*.tmp
+*.temp

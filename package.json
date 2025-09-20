@@ -1,0 +1,26 @@
+{
+  "name": "blog-hono-api",
+  "scripts": {
+    "dev": "bun run --hot src/server.ts",
+    "build": "bun build --compile --minify --sourcemap ./src/server.ts --outfile ./dist/server",
+    "start": "bun run ./dist/server",
+    "db:push": "drizzle-kit push",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "bun src/db/migrate.ts"
+  },
+  "dependencies": {
+    "@hono/zod-validator": "^0.7.3",
+    "dotenv": "^17.2.2",
+    "drizzle-orm": "^0.44.5",
+    "hono": "^4.9.8",
+    "pg": "^8.16.3",
+    "redis": "^5.8.2",
+    "zod": "^4.1.9"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/pg": "^8.15.5",
+    "drizzle-kit": "^0.31.4",
+    "tsx": "^4.20.5"
+  }
+}
